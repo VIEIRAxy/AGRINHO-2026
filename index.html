@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador AgroSustentável - Agrinho 2026</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #8bc34a;
+            --accent: #fbc02d;
+            --danger: #d32f2f;
+            --bg: #f1f8e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 { color: var(--primary); text-align: center; font-size: 1.5rem; }
+        p.subtitle { text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 20px; }
+
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: var(--secondary); }
+
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .alerta { background-color: #ffcdd2; color: var(--danger); border: 1px solid var(--danger); }
+        .sucesso { background-color: #c8e6c9; color: var(--primary); border: 1px solid var(--primary); }
+        
+        .barra-container {
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        #barra-sustentavel {
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Simulador de Solo Agrinho 2026</h1>
+        <p class="subtitle">Equilíbrio entre Produção e Meio Ambiente</p>
+
+        <div class="input-group">
+            <label>Nível de Nitrogênio (mg/dm³):</label>
+            <input type="number" id="nitro" placeholder="Ex: 20">
+        </div>
+
+        <div class="input-group">
+            <label>Nível de Fósforo (mg/dm³):</label>
+            <input type="number" id="fosforo" placeholder="Ex: 15">
+        </div>
+
+        <button onclick="simular()">Analisar Sustentabilidade</button>
+
+        <div id="resultado">
+            <strong id="status-texto"></strong>
+            <p id="feedback-texto" style="font-size: 0.9rem; margin-top: 5px;"></p>
+            <div class="barra-container">
+                <div id="barra-sustentavel"></div>
+            </div>
+            <small>Índice de Sustentabilidade</small>
+        </div>
+    </div>
+
+    <script>
+        function simular() {
+            const n = parseFloat(document.getElementById('nitro').value);
+            const p = parseFloat(document.getElementById('fosforo').value);
+            const resDiv = document.getElementById('resultado');
+            const status = document.getElementById('status-texto');
+            const feedback = document.getElementById('feedback-texto');
+            const barra = document.getElementById('barra-sustentavel');
+
+            if (isNaN(n) || isNaN(p)) {
+                alert("Por favor, preencha os valores de N e P.");
+                return;
+            }
+
+            resDiv.style.display = 'block';
+            
+            // Lógica simples de equilíbrio (Valores hipotéticos para exemplo)
+            // Ideal: N entre 30-50, P entre 20-40
+            let pontosSustentaveis = 100;
+
+            if (n > 60 || p > 50) {
+                resDiv.className = 'alerta';
+                status.innerText = "⚠️ Risco de Lixiviação!";
+                feedback.innerText = "O excesso de nutrientes pode contaminar rios e lençóis freáticos. Reduza a fertilização.";
+                pontosSustentaveis = 40;
+                barra.style.backgroundColor = 'var(--danger)';
+            } else if (n < 20 || p < 15) {
+                resDiv.className = 'alerta';
+                status.innerText = "📉 Baixa Produtividade!";
+                feedback.innerText = "O solo está pobre. A planta não crescerá bem, o que gera insegurança alimentar.";
+                pontosSustentaveis = 60;
+                barra.style.backgroundColor = 'var(--accent)';
+            } else {
+                resDiv.className = 'sucesso';
+                status.innerText = "✅ Equilíbrio Perfeito!";
+                feedback.innerText = "Sua produção está otimizada com o menor impacto ambiental possível.";
+                pontosSustentaveis = 100;
+                barra.style.backgroundColor = 'var(--primary)';
+            }
+
+            barra.style.width = pontosSustentaveis + '%';
+        }
+    </script>
+
+</body>
+</html>
